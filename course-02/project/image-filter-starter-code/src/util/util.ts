@@ -37,3 +37,18 @@ export async function deleteLocalFiles(files: Array<string>) {
     fs.unlinkSync(file);
   }
 }
+
+export const isValidUrl = (urlString: string) => {
+  try {
+    return Boolean(new URL(urlString));
+  }
+  catch(e){
+    return false;
+  }
+}
+
+export const getAllSavedFiles = () => {
+  return fs.readdirSync(__dirname+"/tmp", {withFileTypes: true})
+      .filter(item => !item.isDirectory())
+      .map(item => __dirname+"/tmp/"+item.name)
+}
