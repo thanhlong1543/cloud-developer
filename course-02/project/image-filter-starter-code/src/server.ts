@@ -38,7 +38,7 @@ import {filterImageFromURL, deleteLocalFiles, isValidUrl, getAllSavedFiles} from
   } );
 
   app.get( "/filteredimage", async ( req, res ) => {
-    let url = req.query.image_url
+    let url:string = req.query.image_url
     if(!isValidUrl(url)) {
         return res.status(400).send("URL not valid")
     }
@@ -46,11 +46,11 @@ import {filterImageFromURL, deleteLocalFiles, isValidUrl, getAllSavedFiles} from
 
     result.then(
         function(value) {
-          res.send(value)
-          deleteLocalFiles(getAllSavedFiles())
+          res.sendFile(value)
         },
         function(error) {res.status(500).send(error)},
     )
+      deleteLocalFiles(getAllSavedFiles())
   } );
 
 
