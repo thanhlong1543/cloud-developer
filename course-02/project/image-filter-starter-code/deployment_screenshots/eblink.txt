@@ -1,0 +1,1 @@
+http://fullstackapponaws-dev.us-east-1.elasticbeanstalk.com/filteredimage?image_url=https://static.remove.bg/remove-bg-web/37843dee2531e43723b012aa78be4b91cc211fef/assets/start_remove-c851bdf8d3127a24e2d137a55b1b427378cd17385b01aec6e59d5d4b5f39d2ec.png
