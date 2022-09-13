@@ -49,4 +49,8 @@ export async function deleteTodo(
     await todoAccess.deleteTodo(todoId)
 }
 
+export async function createAttachmentPresignedUrl(todoId:string): Promise<string> {
+        return AttachmentUtils.storedAttachment(todoId)
+}
+
 

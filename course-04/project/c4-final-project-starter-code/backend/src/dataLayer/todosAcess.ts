@@ -11,9 +11,9 @@ const logger = createLogger('TodosAccess')
 
 export class TodoAccess {
     constructor(
-        private readonly docClient: DocumentClient = createDynamoDBClient(),
-        private readonly todoTable = process.env.GROUPS_TABLE,
-        private readonly todoIndex = process.env.TODO_ID_INDEX) {
+        private readonly docClient: DocumentClient = new DocumentClient(),
+        private readonly todoTable = process.env.TODOS_TABLE,
+        private readonly todoIndex = process.env.TODOS_CREATED_AT_INDEX) {
     }
 
     async getTodosForUser(userId: string): Promise<TodoItem[]> {
@@ -69,7 +69,3 @@ export class TodoAccess {
     }
 }
 
-
-function createDynamoDBClient() {
-    return new XAWS.DynamoDB.DocumentClient()
-}

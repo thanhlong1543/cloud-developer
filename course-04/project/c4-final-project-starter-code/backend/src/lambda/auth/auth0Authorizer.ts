@@ -5,6 +5,8 @@ import {decode, verify} from 'jsonwebtoken'
 import {createLogger} from '../../utils/logger'
 import {Jwt} from '../../auth/Jwt'
 import {JwtPayload} from '../../auth/JwtPayload'
+import Axios from 'axios'
+
 
 const logger = createLogger('auth')
 
@@ -58,9 +60,13 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
   const jwt: Jwt = decode(token, { complete: true }) as Jwt
 
   // TODO: Implement token verification
-  // You should implement it similarly to how it was implemented for the exercise for the lesson 5
-  // You can read more about how to do this here: https://auth0.com/blog/navigating-rs256-and-jwks/
-  return verify(jwt, jwksUrl, { algorithms: ['RS256'] }) as JwtPayload
+  const response = await Axios(jwksUrl);
+  const responseData = response.data;
+  const signingKey = responseData['keys'].find(key => key['kid'] === jwt['header']['kid']);
+  if (!signingKey) {
+    throw new Error('Invalid Signing key');
+  }
+  return verify(token, signingKey.x5c, {algorithms: ['RS256']}) as JwtPayload;
 }
 
 function getToken(authHeader: string): string {
