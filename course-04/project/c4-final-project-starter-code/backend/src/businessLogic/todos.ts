@@ -32,26 +32,20 @@ export async function createTodo(
 
 export async function updateTodo(
     updateTodoRequest: UpdateTodoRequest,
-    todoId: string
+    todoId: string,
+    userId: string
 ): Promise<void> {
 
      await todoAccess.updateTodo({
         name: updateTodoRequest.name,
         dueDate: updateTodoRequest.dueDate,
         done: false
-    }, todoId)
+    }, todoId,userId)
 }
 
 export async function deleteTodo(
     todoId: string
-): Promise<void> {
+    , userId: string): Promise<void> {
 
-    await todoAccess.deleteTodo(todoId)
+    await todoAccess.deleteTodo(todoId, userId)
 }
-
-export async function createAttachmentPresignedUrl(todoId:string): Promise<string> {
-        // return AttachmentUtils.storedAttachment(todoId)
-    return todoId
-}
-
-

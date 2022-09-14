@@ -4,14 +4,12 @@ import {DocumentClient} from 'aws-sdk/clients/dynamodb'
 import {createLogger} from '../utils/logger'
 import {TodoItem} from '../models/TodoItem'
 import {TodoUpdate} from '../models/TodoUpdate';
-
-const XAWS = AWSXRay.captureAWS(AWS)
-
 const logger = createLogger('TodosAccess')
+AWSXRay.captureAWS(AWS);
 
 export class TodoAccess {
     constructor(
-        private readonly docClient: DocumentClient = new DocumentClient(),
+        private readonly docClient: DocumentClient = createDynamoDBClient(),
         private readonly todoTable = process.env.TODOS_TABLE,
         private readonly todoIndex = process.env.TODOS_CREATED_AT_INDEX) {
     }
@@ -28,6 +26,8 @@ export class TodoAccess {
             }
         }).promise()
 
+        logger.info('Data query:', result.Items)
+
         const items = result.Items
         return items as TodoItem[]
     }
@@ -38,34 +38,57 @@ export class TodoAccess {
             TableName: this.todoTable,
             Item: todo
         }).promise()
+        logger.info('Update todo success:', todo)
 
         return todo
     }
 
-    async updateTodo(todo: TodoUpdate, todoId: string): Promise<void> {
+    async updateTodo(todo: TodoUpdate, todoId: string, userId: string): Promise<void> {
         logger.info('Update todo', todo)
         await this.docClient.update({
             TableName: this.todoTable,
             Key: {
-                "id": todoId
+                "todoId": todoId,
+                'userId': userId
             },
-            UpdateExpression: "set name = :a, dueDate = :b, done = :c",
+            UpdateExpression: "set dueDate = :b, done = :c",
             ExpressionAttributeValues: {
-                ":a": todo.name,
                 ":b": todo.dueDate,
                 ":c": todo.done
             }
         }).promise()
+        logger.info('Update todo success:', todoId)
     }
 
-    async deleteTodo(todoId: string): Promise<void> {
+    async deleteTodo(todoId: string, userId: string): Promise<void> {
         logger.info('Delete todo', todoId)
         await this.docClient.delete({
             Key: {
-                'id': todoId
+                'todoId': todoId,
+                'userId': userId
             },
             TableName: this.todoTable
         }).promise()
+        logger.info('Delete todo success:', todoId)
+    }
+
+    async updateAttachmentURL(todoId: String, userId: String, url: String): Promise<void> {
+        logger.info(`updating attachmentURL for ${todoId}. Setting URL to ${url}`)
+        await this.docClient.update({
+            TableName: this.todoTable,
+            Key: {
+                "userId": userId,
+                "todoId": todoId
+            },
+            UpdateExpression: "set attachmentUrl=:url",
+            ExpressionAttributeValues: {
+                ":url": url
+            }
+        }).promise()
+        logger.info("update attachment successfully:", todoId)
     }
 }
 
+function createDynamoDBClient(): DocumentClient {
+    return new AWS.DynamoDB.DocumentClient()
+}

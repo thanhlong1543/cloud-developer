@@ -59,6 +59,7 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
   const token = getToken(authHeader)
   const jwt: Jwt = decode(token, { complete: true }) as Jwt
 
+  logger.info('Decoded token: ',jwt)
   // TODO: Implement token verification
   const response = await Axios(jwksUrl);
   const responseData = response.data;
@@ -66,7 +67,11 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
   if (!signingKey) {
     throw new Error('Invalid Signing key');
   }
-  return verify(token, signingKey.x5c, {algorithms: ['RS256']}) as JwtPayload;
+
+  logger.info('Signing Key fetched: ',signingKey)
+  let cert = `-----BEGIN CERTIFICATE-----\n${signingKey.x5c[0]}\n-----END CERTIFICATE-----`
+  logger.info('CERTIFICATE fetched: ',cert)
+  return verify(token, cert, {algorithms: ['RS256']}) as JwtPayload;
 }
 
 function getToken(authHeader: string): string {
