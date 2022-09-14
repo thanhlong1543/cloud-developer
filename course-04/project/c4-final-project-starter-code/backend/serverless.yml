@@ -1,5 +1,5 @@
-# TODO: Change the name of the org 
-org: longca
+# TODO: Change the name of the org
+org: longvt6
 app: serverless-todo-app
 service: serverless-todo-app
 
@@ -86,9 +86,9 @@ functions:
           - dynamodb:PutItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
       - Effect: Allow
-          Action:
-            - s3:PutObject
-          Resource: !GetAtt AttachmentsBucket.Arn
+        Action:
+          - s3:PutObject
+        Resource: !GetAtt AttachmentsBucket.Arn
 
   # TODO: Configure this function
   # Provide property for setting up CORS, Authorizer, iamRoleStatements, and request schemas
@@ -153,17 +153,17 @@ resources:
             KeyType: HASH
           - AttributeName: todoId
             KeyType: RANGE
-          BillingMode: PAY_PER_REQUEST
-          TableName: ${self:provider.environment.TODOS_TABLE}
-          LocalSecondaryIndexes:
-            - IndexName: ${self:provider.environment.TODOS_CREATED_AT_INDEX}
-              KeySchema:
-                - AttributeName: userId
-                  KeyType: HASH
-                - AttributeName: createdAt
-                  KeyType: RANGE
-              Projection:
-                ProjectionType: ALL # What attributes will be copied to an index
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.TODOS_TABLE}
+        LocalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.TODOS_CREATED_AT_INDEX}
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+              - AttributeName: createdAt
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL # What attributes will be copied to an index
 
     AttachmentsBucket:
       Type: AWS::S3::Bucket

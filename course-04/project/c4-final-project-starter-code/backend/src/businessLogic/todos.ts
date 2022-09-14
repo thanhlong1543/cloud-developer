@@ -1,9 +1,9 @@
-import {AttachmentUtils} from './attachmentUtils';
+// import {AttachmentUtils} from './attachmentUtils';
 import {TodoItem} from '../models/TodoItem'
 import {CreateTodoRequest} from '../requests/CreateTodoRequest'
 import {UpdateTodoRequest} from '../requests/UpdateTodoRequest'
 import * as uuid from 'uuid'
-import * as createError from 'http-errors'
+// import * as createError from 'http-errors'
 import {TodoAccess} from '../dataLayer/todosAcess'
 
 
@@ -50,7 +50,8 @@ export async function deleteTodo(
 }
 
 export async function createAttachmentPresignedUrl(todoId:string): Promise<string> {
-        return AttachmentUtils.storedAttachment(todoId)
+        // return AttachmentUtils.storedAttachment(todoId)
+    return todoId
 }
 
 
