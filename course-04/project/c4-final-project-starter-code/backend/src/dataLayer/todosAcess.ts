@@ -5,11 +5,12 @@ import {createLogger} from '../utils/logger'
 import {TodoItem} from '../models/TodoItem'
 import {TodoUpdate} from '../models/TodoUpdate';
 const logger = createLogger('TodosAccess')
-AWSXRay.captureAWS(AWS);
+
+const XAWS = AWSXRay.captureAWS(AWS);
 
 export class TodoAccess {
     constructor(
-        private readonly docClient: DocumentClient = createDynamoDBClient(),
+        private readonly docClient: DocumentClient = new XAWS.DynamoDB.DocumentClient(),
         private readonly todoTable = process.env.TODOS_TABLE,
         private readonly todoIndex = process.env.TODOS_CREATED_AT_INDEX) {
     }
@@ -89,6 +90,3 @@ export class TodoAccess {
     }
 }
 
-function createDynamoDBClient(): DocumentClient {
-    return new AWS.DynamoDB.DocumentClient()
-}
