@@ -5,7 +5,7 @@
   "dependencies": {
     "@types/axios": "^0.14.0",
     "@types/http-errors": "^1.8.2",
-    "aws-xray-sdk": "^2.5.0",
+    "aws-xray-sdk": "^3.0.0",
     "axios": "^0.18.1",
     "http-errors": "^1.8.1",
     "jsonwebtoken": "^8.5.1",
@@ -15,9 +15,11 @@
     "winston": "^3.8.2"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.11",
     "@types/aws-lambda": "^8.10.104",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/node": "^10.17.60",
+    "jest": "^24.7.1",
     "aws-sdk": "^2.1215.0",
     "serverless-aws-documentation": "^1.1.0",
     "serverless-iam-roles-per-function": "^3.2.0",
@@ -26,6 +28,7 @@
     "serverless-reqvalidator-plugin": "^1.0.4",
     "serverless-webpack": "^5.9.1",
     "ts-loader": "^5.3.3",
+    "ts-jest": "^24.0.2",
     "typescript": "^4.8.3",
     "webpack": "^4.46.0"
   },
